@@ -56,7 +56,7 @@ git --version
 #### 1. Forker et cloner le dépôt Forge
 
 Connectez-vous à GitHub, forker et cloner le
-projet [https://github.com/NathanRoy1/forge](https://github.com/Card-Forge/forge), puis clonez votre
+projet [Forge](https://github.com/NathanRoy1/forge), puis clonez votre
 fork dans un dossier vide sur votre ordinateur.
 
 #### 2. Ouvrir le dossier dans votre IDE préféré
@@ -123,6 +123,12 @@ J'ai donc ajouté une classe `PsychicFrog` dans `SpecialCardAi.java` avec deux m
 - `forge-card/src/main/res/cardsfolder/p/psychic_frog.txt`
 - `forge-ai/src/main/java/forge/ai/ability/PumpAi.java`
 
+*Liens vers l'issue*
+- L'issue directement sur le dépot Forge : [Issue Psychic Frog](https://github.com/Card-Forge/forge/issues/6379)
+- L'issue de mon dépot : [Issue Psychic Frog](https://github.com/NathanRoy1/forge/tree/AI-doesn't-activate-first-ability-of-Psychic-Frog)
+- La pull Request : [Pull Request Psychic Frog](https://github.com/Card-Forge/forge/pull/9978)
+
+
 ---
 
 ### Issue 2 — L'IA n'utilise pas l'aptitude de tap d'Emry, Lurker of the Loch
@@ -179,6 +185,12 @@ la permission de lancer des cartes depuis le cimetière : elle retournait toujou
 
 - `forge-card/src/main/res/cardsfolder/e/emry_lurker_of_the_loch.txt`
 - `forge-ai/src/main/java/forge/ai/ability/EffectAi.java`
+
+*Liens vers l'issue*
+- L'issue directement sur le dépot Forge : [Issue Emry's Lurker of the Loch](https://github.com/Card-Forge/forge/issues/6387)
+- L'issue de mon dépot : [Issue Emry's Lurker of the Loch](https://github.com/NathanRoy1/forge/tree/AI-doesn't-activate-first-ability-of-Psychic-Frog)
+- La pull Request : [Pull Request Emry's Lurker of the Loch](https://github.com/Card-Forge/forge/pull/9783)
+
 
 ## Tester mes corrections
 
