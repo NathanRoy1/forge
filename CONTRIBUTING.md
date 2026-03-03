@@ -1,120 +1,125 @@
-# Contributing to Forge
+# Guide de contribution
 
-[Official repo](https://github.com/Card-Forge/forge.git).
+Merci de l'intérêt que vous portez à ce projet. Ce document décrit les outils requis, la démarche à suivre pour contribuer, les issues traitées avec leur démarche de résolution, ainsi que les standards de code à respecter.
 
-## Requirements / Tools
+---
 
-- your favourite Java IDE (IntelliJ, Eclipse, VSCodium, Emacs, Vi...)
-- Java JDK 17 or later
-- Git
-- Git client (optional)
+## Outils requis
+
+Avant de contribuer, assurez-vous d'avoir les outils suivants installés :
+
+- Un IDE Java (recommandé : IntelliJ, Eclipse, VSCodium)
+- Java JDK 17 ou supérieur
+- Git et un client Git (optionnel)
 - Maven
-- GitHub account
-- Libgdx (optional: familiarity with this library is helpful for mobile platform development)
-- Android SDK (optional: for Android releases)
-- RoboVM (optional: for iOS releases) (TBD: Current status of support by libgdx)
+- Un compte GitHub
+- Libgdx (optionnel : utile pour le développement mobile)
+- Android SDK (optionnel : pour les versions Android)
 
-## Project Quick Setup
+---
 
-- Login into GitHub with your user account and fork the project
-- Clone your forked project to your local machine
-- Go to the project location on your machine. Run Maven to download all dependencies and build a snapshot.
-  - Example for Windows & Linux: `mvn -U -B clean -P windows-linux install`
+## Démarche de contribution
 
-## IntelliJ
+### Points importants
+- Respectez le style de code existant dans le module `forge-ai`.
+- Une issue = une pull request.
+- Commentez votre logique pour expliquer *pourquoi* l'IA prend une décision, pas seulement *ce qu'elle fait*.
 
-IntelliJ is the recommended IDE for Forge development. Quick start guide for [setting up the Forge project within IntelliJ](https://github.com/Card-Forge/forge/wiki/IntelliJ-setup).
+### Étapes 
+- Créer une branche dans votre fork 
+- Apporter vos modifications
+- Tester vos modifications 
+- Soumettre une pull request en rédigeant un titre et une description clairs.
+- Référencez le numéro de l'issue.
+- Décrivez le comportement avant et après votre correction.
 
-## Eclipse
+---
 
-Eclipse includes Maven integration so a separate install is not necessary.
-Google no longer supports Android SDK releases for Eclipse.
+# Hiérarchie des projets
 
-## Windows
+Forge est divisé en 4 projets principaux avec des projets supplémentaires ciblant des plateformes spécifiques.
 
-TBD
+## Projets principaux
 
-## Linux / Mac OSX
+- `forge-ai`
+- `forge-core`
+- `forge-game`
+- `forge-gui`
 
-TBD
+## Projets spécifiques aux plateformes
 
-### Android Platform
+- `forge-gui-android`
+- `forge-gui-desktop`
+- `forge-gui-ios`
+- `forge-gui-mobile`
+- `forge-gui-mobile-dev`
 
-In IntelliJ, if the SDK Manager is not already running, go to Tools > Android > Android SDK Manager. Install the following options / versions:
+---
 
-- Android SDK Build-tools 35.0.0
-- Android 15 (API 35) SDK Platform
+## forge-ai
 
-> [!CAUTION]
-> Be careful about using unsupported api calls e.g. ``StringBuilder.isEmpty()``. Google's documentation for these is sometimes inaccurate.
+Le projet `forge-ai` contient la logique de l’adversaire contrôlé par l’ordinateur pour le gameplay.  
+Il inclut les algorithmes de prise de décision pour des capacités spécifiques, des cartes et les différentes phases du tour.
 
-### Proguard update
+---
 
-Standalone Proguard 7.6.0 is included with the project (proguard.jar) under forge-gui-android > tools and supports up to Java 23 (latest android uses Java 17).
+## forge-core
 
-## Card Scripting
+Le projet `forge-core` contient le moteur principal du jeu, les mécaniques des cartes, le moteur de règles ainsi que la logique fondamentale du jeu.  
+Il comprend l’implémentation des règles de *Magic: The Gathering*, les interactions entre les cartes et le système de gestion de l’état du jeu.
 
-Visit [this page](https://github.com/Card-Forge/forge/wiki/Card-scripting-API) for information on scripting.
+---
 
-Card scripting resources are found in the forge-gui/res/ path.
+## forge-game
 
-## General Notes
+Le projet `forge-game` gère la gestion des sessions de jeu, les interactions entre les joueurs et le contrôle du déroulement de la partie.  
+Il inclut les implémentations pour le multijoueur, les modes de jeu, le matchmaking ainsi que la persistance de l’état du jeu.
 
-Art files need to be copyright-free and they should be in the public domain.
+Ce module fait le lien entre le moteur principal du jeu, l’interface utilisateur et les composants réseau.
 
-### Project Hierarchy
+---
 
-Forge is divided into 4 primary projects with additional projects that target specific platform releases. The primary projects are:
+## forge-gui
 
-- forge-ai
-- forge-core
-- forge-game
-- forge-gui
+Le projet `forge-gui` contient les composants de l’interface utilisateur ainsi que la logique de rendu du jeu.  
+Il inclut la fenêtre principale du jeu, l’affichage des cartes, les interactions des joueurs et les définitions des ressources de scripts situées dans le répertoire `res/`.
 
-The platform-specific projects are:
+---
 
-- forge-gui-android
-- forge-gui-desktop
-- forge-gui-ios
-- forge-gui-mobile
-- forge-gui-mobile-dev
+## forge-gui-android
 
-#### forge-ai
+Backend basé sur **LibGDX** ciblant Android.  
+Nécessite le SDK Android et s’appuie sur `forge-gui-mobile` pour la logique de l’interface graphique.
 
-The forge-ai project contains the computer opponent logic for gameplay. It includes decision-making algorithms for specific abilities, cards and turn phases.
+---
 
-#### forge-core
+## forge-gui-desktop
 
-The forge-core project contains the core game engine, card mechanics, rules engine, and fundamental game logic. It includes the implementation of Magic: The Gathering rules, card interactions, and the game state management system.
+Interface graphique basée sur **Java Swing** ciblant les ordinateurs de bureau.
 
-#### forge-game
+La disposition des écrans et la logique liée à l’interface graphique se trouvent ici.  
+Par exemple, les flèches superposées (lorsqu’elles sont activées) indiquant les attaquants et les bloqueurs, ou les cibles de la pile, sont définies et dessinées dans ce module.
 
-The forge-game project handles the game session management, player interactions, and game flow control. It includes implementations for multiplayer support, game modes, matchmaking, and game state persistence. This module bridges the core game engine with the user interface and networking components.
+---
 
-#### forge-gui
+## forge-gui-ios
 
-The forge-gui project contains the user interface components and rendering logic for the game. It includes the main game window, card displays, player interactions, and the scripting resource definitions in the res/ path.
+Backend basé sur **LibGDX** ciblant iOS.  
+S’appuie sur `forge-gui-mobile` pour la logique de l’interface graphique.
 
-#### forge-gui-android
+---
 
-Libgdx-based backend targeting Android. Requires Android SDK and relies on forge-gui-mobile for GUI logic.
+## forge-gui-mobile
 
-#### forge-gui-desktop
+Logique de l’interface graphique mobile utilisant la bibliothèque **LibGDX**.  
+La disposition des écrans et la logique liée à l’interface graphique pour les plateformes mobiles se trouvent dans ce module.
 
-Java Swing based GUI targeting desktop machines.
+---
 
-Screen layout and game logic revolving around the GUI is found here. For example, the overlay arrows (when enabled) that indicate attackers and blockers, or the targets of the stack are defined and drawn by this.
+## forge-gui-mobile-dev
 
-#### forge-gui-ios
+Backend **LibGDX** pour le développement desktop des backends mobiles.  
+Utilise **LWJGL**.  
+S’appuie sur `forge-gui-mobile` pour la logique de l’interface graphique.
 
-Libgdx-based backend targeting iOS. Relies on forge-gui-mobile for GUI logic.
-
-#### forge-gui-mobile
-
-Mobile GUI game logic utilizing [libgdx](https://libgdx.badlogicgames.com/) library. Screen layout and game logic revolving around the GUI for the mobile platforms is found here.
-
-#### forge-gui-mobile-dev
-
-Libgdx backend for desktop development for mobile backends. Utilizes LWJGL. Relies on forge-gui-mobile for GUI logic.
-
-#### forge-installer
+---

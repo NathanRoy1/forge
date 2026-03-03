@@ -1,101 +1,214 @@
-# ⚔️  Forge: The Magic: The Gathering Rules Engine
+# ⚔️ Contributions à Forge MTG — Améliorations de l'IA
 
-Join the **Forge community** on [Discord](https://discord.gg/HcPJNyD66a)!
+Rejoignez la **communauté Forge** sur [Discord](https://discord.gg/HcPJNyD66a) !
 
 [![Test build](https://github.com/Card-Forge/forge/actions/workflows/test-build.yaml/badge.svg)](https://github.com/Card-Forge/forge/actions/workflows/test-build.yaml)
 
----
-
-## ✨ Introduction
-
-**Forge** is a dynamic and open-source **Rules Engine** tailored for **Magic: The Gathering** enthusiasts. Developed by a community of passionate programmers, Forge allows players to explore the rich universe of MTG through a flexible, engaging platform. 
-
-**Note:** Forge operates independently and is not affiliated with Wizards of the Coast.
+> **Dépôt officiel :** [Card-Forge/forge](https://github.com/Card-Forge/forge)  
+> Ce dépôt contient nos contributions au moteur de jeu Forge, axées sur l'amélioration de l'intelligence artificielle.
 
 ---
 
-## 🌟 Key Features
+## Introduction
 
-- **🌐 Cross-Platform Support:** Play on **Windows, Mac, Linux,** and **Android**.
-- **🔧 Extensible Architecture:** Built in **Java**, Forge encourages developers to contribute by adding features and cards.
-- **🎮 Versatile Gameplay:** Dive into single-player modes or challenge opponents online!
+**Forge** est un moteur de règles libre et open source pour **Magic: The Gathering**, développé par une communauté de
+programmeurs passionnés. Il permet aux joueurs d'explorer l'univers de MTG à travers une plateforme flexible et
+extensible.
 
----
+**Note :** Forge est un projet indépendant, non affilié à Wizards of the Coast.
 
-## 🛠️ Installation Guide
-
-### 📥 Desktop Installation
-1. **Latest Releases:** Download the latest version [here](https://github.com/Card-Forge/forge/releases/latest).
-2. **Snapshot Build:** For the latest development version, grab the `forge-gui-desktop` tarball from our [Snapshot Build](https://github.com/Card-Forge/forge/releases/tag/daily-snapshots).
-   - **Tip:** Extract to a new folder to prevent version conflicts.
-3. **User Data Management:** Previous players’ data is preserved during upgrades.
-4. **Java Requirement:** Ensure you have **Java 17 or later** installed.
-
-### 📱 Android Installation
-- _(Note: **Android 11** is the minimum requirement with at least **6GB RAM** to run smoothly. You need to enable **"Install unknown apps"** for Forge to initialize and update itself)_
-- Download the **APK** from the [Snapshot Build](https://github.com/Card-Forge/forge/releases/tag/daily-snapshots). On the first launch, Forge will automatically download all necessary assets.
+Notre contribution se concentre sur le module `forge-ai`, responsable de toutes les décisions prises par le joueur
+contrôlé par l'ordinateur. Les améliorations visent à corriger des comportements erronés de l'IA lors de l'évaluation
+d'aptitudes activées, notamment pour des cartes comme **Psychic Frog** et **Emry, Lurker of the Loch**.
 
 ---
 
-## 🎮 Modes of Play
+## Fonctionnalités principales de Forge
 
-Forge offers various exciting gameplay options:
-
-### 🌍 Adventure Mode
-Embark on a thrilling single-player journey where you can:
-- Explore an overworld map.
-- Challenge diverse AI opponents.
-- Collect cards and items to boost your abilities.
-
-<img width="1282" height="752" alt="Shandalar World" src="https://github.com/user-attachments/assets/9af31471-d688-442f-9418-9807d8635b72" />
-
-### 🔍 Quest Modes
-Engage in focused gameplay without the overworld exploration—perfect for quick sessions!
-
-<img width="1282" height="752" alt="Quest Duels" src="https://github.com/user-attachments/assets/b9613b1c-e8c3-4320-8044-6922c519aad4" />
-
-### 🤖 AI Formats
-Test your skills against AI in multiple formats:
-- **Sealed**
-- **Draft**
-- **Commander**
-- **Cube**
-
-For comprehensive gameplay instructions, visit our [User Guide](https://github.com/Card-Forge/forge/wiki/User-Guide).
-
-<img width="1282" height="752" alt="Sealed" src="https://github.com/user-attachments/assets/ae603dbd-4421-4753-a333-87cb0a28d772" />
+- **Support multi-plateforme :** Jouez sur Windows, Mac, Linux et Android.
+- **Architecture extensible :** Développé en Java, Forge encourage les contributions de la communauté.
+- **Modes de jeu variés :** Mode solo, mode Aventure, formats Scellé, Draft, Commander, Cube.
 
 ---
 
-## 💬 Support & Community
+## Prérequis
 
-Need help? Join our vibrant Discord community! 
-- 📜 Read the **#rules** and explore the **FAQ**.
-- ❓ Ask your questions in the **#help** channel for assistance.
+Avant d'installer le projet, assurez-vous d'avoir les outils suivants sur votre machine :
 
----
+| Outil         | Version minimale      | Lien                      |
+|---------------|-----------------------|---------------------------|
+| Java JDK      | 17                    | https://adoptium.net      |
+| Git           | Toute version récente | https://git-scm.com       |
+| IDE Java      | Demandé : IntelliJ    | https://www.jetbrains.com |
+| Compte GitHub | —                     | https://github.com        |
 
-## 🤝 Contributing to Forge
+Pour vérifier vos installations, éxectué ces commandes :
 
-We love community contributions! Interested in helping? Check out our [Contributing Guidelines](CONTRIBUTING.md) for details on how to get started.
-
----
-
-## ℹ️ About Forge
-
-Forge aims to deliver an immersive and customizable Magic: The Gathering experience for fans around the world. 
-
-### 📊 Repository Statistics
-
-| Metric         | Count                                                       |
-|----------------|-------------------------------------------------------------|
-| **⭐ Stars:**   | [![GitHub stars](https://img.shields.io/github/stars/Card-Forge/forge?style=flat-square)](https://github.com/Card-Forge/forge/stargazers) |
-| **🍴 Forks:**   | [![GitHub forks](https://img.shields.io/github/forks/Card-Forge/forge?style=flat-square)](https://github.com/Card-Forge/forge/network) |
-| **👥 Contributors:** | [![GitHub contributors](https://img.shields.io/github/contributors/Card-Forge/forge?style=flat-square)](https://github.com/Card-Forge/forge/graphs/contributors) |
+```bash
+java -version
+git --version
+```
 
 ---
 
-**📄 License:** [GPL-3.0](LICENSE)
+## Installation
+
+#### 1. Forker et cloner le dépôt Forge
+
+Connectez-vous à GitHub, forker et cloner le
+projet [https://github.com/NathanRoy1/forge](https://github.com/Card-Forge/forge), puis clonez votre
+fork dans un dossier vide sur votre ordinateur.
+
+#### 2. Ouvrir le dossier dans votre IDE préféré
+
+> IntelliJ est l'IDE recommandé pour le développement sur Forge.
+
+## Configuration
+
+Pour configurer le projet sur desktop consultez
+le [guide de configuration IntelliJ](https://github.com/Card-Forge/forge/wiki/IntelliJ-setup) du dépot officiel de
+Forge.
+Ce tutoriel présente l’ensemble des étapes, de l’installation jusqu’au lancement de l’application.
+
+Si certaines étapes ont déjà été complétées (par exemple, l’installation d’IntelliJ ou du JDK Java), il n’est pas nécessaire de les refaire.
+
+> La compilation complète peut prendre plusieurs minutes lors du premier lancement (téléchargement des dépendances
+> Maven).
+
+---
+
+## Issues réalisées
+
+### Issue 1 — L'IA n'active pas la première aptitude de Psychic Frog
+
+**Description**
+
+L'IA contrôlant un **Psychic Frog** sur le champ de bataille n'activait jamais sa première aptitude (Défausser une
+carte : Poser un marqueur +1/+1 sur Psychic Frog), même dans des situations où cette activation lui aurait permis de
+survivre en combat ou de tuer une créature adverse.
+
+**Étapes pour reproduire**
+
+1. Le joueur humain attaque avec Shalai, Voice of Plenty.
+2. L'IA contrôle un Psychic Frog sur le champ de bataille.
+3. L'IA a 4 cartes ou plus en main.
+4. L'IA ne déclare pas Psychic Frog comme bloqueur et n'active pas son aptitude.
+
+**Comportement attendu**
+
+L'IA devrait activer la première aptitude de Psychic Frog dans les situations suivantes :
+
+- Le marqueur +1/+1 lui permet de survivre à un combat qu'elle perdrait autrement.
+- Le marqueur +1/+1 lui permet de tuer une créature adverse qu'elle ne tuerait pas autrement.
+- L'IA a 8 cartes ou plus en main (coût de défausse jugé négligeable).
+- La créature est menacée par un sort ou une aptitude adverse.
+
+**Démarche de résolution**
+
+En inspectant le module `forge-ai`, j'ai constaté qu'aucune logique spécifique à Psychic Frog n'existait dans
+`SpecialCardAi.java`. La classe `ability_CountersAi.java` évaluait les aptitudes qui posent des marqueurs(+1/+1), mais
+ne prenait pas compte du contexte de combat ni du coût de la défausse.
+
+J'ai donc ajouté une classe `PsychicFrog` dans `SpecialCardAi.java` avec deux méthodes :
+
+- `considerCounterAbility` : évalue si l'activation du marqueur est pertinente avant ou pendant le combat (en tant que
+  bloqueur.
+- `considerFlyingAbility` : évalue si l'activation de l'aptitude de vol est pertinente pour bloquer un voleur adverse ou
+  attaquer sans blocage possible.
+
+**Fichiers modifiés**
+
+- `forge-ai/src/main/java/forge/ai/SpecialCardAi.java`
+- `forge-ai/src/main/java/forge/ai/ability/ability_CountersAi.java`
+- `forge-card/src/main/res/cardsfolder/p/psychic_frog.txt`
+- `forge-ai/src/main/java/forge/ai/ability/PumpAi.java`
+
+---
+
+### Issue 2 — L'IA n'utilise pas l'aptitude de tap d'Emry, Lurker of the Loch
+
+**Description**
+
+L'IA contrôlant **Emry, Lurker of the Loch** sur le champ de bataille n'utilisait pas son aptitude de tap (`{T}` :
+Choisissez une carte artefact dans votre cimetière. Vous pouvez la lancer ce tour-ci.), même lorsqu'un artefact jouable
+était disponible dans son cimetière et que le mana était suffisant.
+
+**Étapes pour reproduire**
+
+1. L'IA contrôle Emry, Lurker of the Loch (non engagée) sur le champ de bataille.
+2. Le cimetière de l'IA contient au moins un artefact jouable (mana suffisant pour le lancer).
+3. C'est le tour principal de l'IA.
+4. L'IA ne tape pas Emry et ne relance pas l'artefact.
+
+**Comportement attendu**
+
+L'IA devrait utiliser l'aptitude de tap d'Emry pour relancer un artefact depuis son cimetière si :
+
+- Un artefact jouable est présent dans le cimetière.
+- L'IA a assez de mana pour lancer cet artefact ce tour-ci.
+- Taper Emry ne compromet pas un blocage critique.
+
+**Démarche de résolution**
+
+En inspectant `ability_EffectAi.java` (qui gère les Effect abilities),
+j'ai constaté que l'IA ne reconnaissait pas automatiquement les abilities qui lui accordent
+la permission de lancer des cartes depuis le cimetière : elle retournait toujours `CantPlayAi`.
+
+**Solution implémentée** : J'ai ajouté une auto-détection dans le bloc `RememberObjects` de `EffectAi.java` qui :
+
+**Détecte automatiquement** les abilities "cast from graveyard" en analysant les `StaticAbilities` :
+
+- Vérifie la présence de `MayPlay$ True`
+- Vérifie `AffectedZone$ Graveyard`
+- Fonctionne pour Emry, Snapcaster Mage, et toutes les cartes similaires
+
+**Ajouter une logique défensive** pour le combat :
+
+- Détecte la phase declare attackers de l'adversaire
+- Évalue si des créatures flash dans le cimetière peuvent bloquer profitablement
+- Utilise `ComputerUtilCombat.canDestroyAttacker/canDestroyBlocker` pour le calcul de combat
+- Vérifie le mana disponible avec `canPayManaCost()` (pas juste les sources totales)
+
+**Respecte les restrictions de timing** :
+
+- Cartes sorcery-speed : uniquement en main phase de l'IA
+- Cartes avec Flash : également pendant declare attackers ou après le combat adverse
+- Évite d'activer dans end step ou autres phases inappropriées
+
+**Fichiers modifiés** :
+
+- `forge-card/src/main/res/cardsfolder/e/emry_lurker_of_the_loch.txt`
+- `forge-ai/src/main/java/forge/ai/ability/EffectAi.java`
+
+## Tester mes corrections
+
+### Psychic Frog
+
+Lancez Forge et démarrez une nouvelle partie avec un deck contenant Psychic Frog est assigner à l'IA.
+Assurez-vous que l'IA a au moins 4 cartes en main.
+Faites attaquer votre joueur humain avec une créature (ex. : Shalai, Voice of Plenty).
+Résultat attendu : l'IA active la première aptitude de Psychic Frog (Défausser une carte → +1/+1) lorsque cela lui
+permet de survivre au combat ou de tuer la créature adverse.
+
+### Emry, Lurker of the Loch
+
+Démarrez une nouvelle partie avec un deck contenant Emry et plusieurs artefacts.
+Laissez Emry déclencher son entrée en jeu (mouliner 4 cartes).
+Assurez-vous que l'IA a assez de mana pour relancer un artefact.
+Résultat attendu : l'IA tape Emry pour relancer l'artefact au coût de mana le plus élevé disponible dans son cimetière.
+
+## Ressources
+
+- Dépôt officiel Forge MTG
+- Wiki Forge
+- Guide utilisateur
+- Guide de configuration IntelliJ
+- Documentation du scripting de cartes
+- Discord communautaire
+
+## License
+
+[GPL-3.0](LICENSE)
 <div align="center" style="display: flex; align-items: center; justify-content: center;">
     <div style="margin-left: auto;">
         <a href="#top">
@@ -103,3 +216,6 @@ Forge aims to deliver an immersive and customizable Magic: The Gathering experie
         </a>
     </div>
 </div>
+
+
+
