@@ -112,6 +112,7 @@ public enum CSubmenuPreferences implements ICDoc {
         lstControls.clear(); // just in case
         lstControls.add(Pair.of(view.getCbAnte(), FPref.UI_ANTE));
         lstControls.add(Pair.of(view.getCbAnteMatchRarity(), FPref.UI_ANTE_MATCH_RARITY));
+        lstControls.add(Pair.of(view.getCbAnteIncludeBasicLands(), FPref.UI_ANTE_INCLUDE_BASIC_LANDS));
         lstControls.add(Pair.of(view.getCbManaBurn(), FPref.UI_MANABURN));
         lstControls.add(Pair.of(view.getCbOrderCombatants(), FPref.LEGACY_ORDER_COMBATANTS));
         lstControls.add(Pair.of(view.getCbScaleLarger(), FPref.UI_SCALE_LARGER));
@@ -230,6 +231,7 @@ public enum CSubmenuPreferences implements ICDoc {
         initializeGraveyardOrderingComboBox();
         initializePlayerNameButton();
         initializeServerPortButton();
+        initializeAfkTimeoutButton();
         initializeDefaultLanguageComboBox();
 
         disableLazyLoading();
@@ -720,6 +722,27 @@ public enum CSubmenuPreferences implements ICDoc {
         return () -> {
             GamePlayerUtil.setServerPort();
             setServerPortButtonText();
+        };
+    }
+
+    private void initializeAfkTimeoutButton() {
+        final FLabel btn = view.getBtnAfkTimeout();
+        setAfkTimeoutButtonText();
+        btn.setCommand(getAfkTimeoutButtonCommand());
+    }
+    private void setAfkTimeoutButtonText() {
+        final FLabel btn = view.getBtnAfkTimeout();
+        final int minutes = netPrefs.getPrefInt(ForgeNetPreferences.FNetPref.NET_AFK_TIMEOUT);
+        if (minutes <= 0) {
+            btn.setText(localizer.getMessage("lblAfkTimeoutDisabled"));
+        } else {
+            btn.setText(minutes + ":00");
+        }
+    }
+    private UiCommand getAfkTimeoutButtonCommand() {
+        return () -> {
+            GamePlayerUtil.setAfkTimeout();
+            setAfkTimeoutButtonText();
         };
     }
 }

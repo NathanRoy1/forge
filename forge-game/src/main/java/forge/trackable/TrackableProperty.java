@@ -232,7 +232,6 @@ public enum TrackableProperty {
     IsExtraTurn(TrackableTypes.BooleanType),
     ExtraTurnCount(TrackableTypes.IntegerType),
     HasPriority(TrackableTypes.BooleanType, FreezeMode.IgnoresFreeze),
-    HasDelirium(TrackableTypes.BooleanType),
     AvatarLifeDifference(TrackableTypes.IntegerType, FreezeMode.IgnoresFreeze),
     HasLost(TrackableTypes.BooleanType),
 
@@ -335,27 +334,4 @@ public enum TrackableProperty {
         return ((TrackableType<T>) type).getDefaultValue();
     }
 
-    @SuppressWarnings("unchecked")
-    public <T> T deserialize(TrackableDeserializer td, T oldValue) {
-        return ((TrackableType<T>) type).deserialize(td, oldValue);
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T> void serialize(TrackableSerializer ts, T value) {
-        ((TrackableType<T>) type).serialize(ts, value);
-    }
-
-    //cache array of all properties to allow quick lookup by ordinal,
-    //which reduces the size and improves performance of serialization
-    //we don't need to worry about the values changing since we will ensure
-    //both players are on the same version of Forge before allowing them to connect
-    private static TrackableProperty[] props = values();
-
-    public static int serialize(TrackableProperty prop) {
-        return prop.ordinal();
-    }
-
-    public static TrackableProperty deserialize(int ordinal) {
-        return props[ordinal];
-    }
 }

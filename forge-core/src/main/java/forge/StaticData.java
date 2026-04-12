@@ -60,7 +60,6 @@ public class StaticData {
     private IStorage<BoosterBox.Template> boosterBoxes;
     private IStorage<PrintSheet> printSheets;
     private final Map<String, List<String>> setLookup = new HashMap<>();
-    private List<String> blocksLandCodes = new ArrayList<>();
 
     private static StaticData lastInstance = null;
 
@@ -103,7 +102,7 @@ public class StaticData {
             for (CardRules card : cardReader.loadCards()) {
                 if (null == card) continue;
 
-                final String cardName = card.getName();
+                final String cardName = card.getPreInitName();
 
                 if (!loadNonLegalCards && funnyCards.contains(cardName) && !card.getType().isBasicLand())
                     filtered.add(cardName);
@@ -409,10 +408,6 @@ public class StaticData {
         databases.put("Common", commonCards);
         databases.put("Variant", variantCards);
         return databases;
-    }
-
-    public List<String> getBlockLands() {
-        return blocksLandCodes;
     }
 
     public TokenDb getAllTokens() { return allTokens; }
