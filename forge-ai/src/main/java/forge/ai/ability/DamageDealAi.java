@@ -78,9 +78,8 @@ public class DamageDealAi extends DamageAiBase {
                 if ("XLifeDrain".equals(logic)) {
                     if (doXLifeDrainLogic(ai, sa)) {
                         return new AiAbilityDecision(100, AiPlayDecision.WillPlay);
-                    } else {
-                        return new AiAbilityDecision(0, AiPlayDecision.CantPlayAi);
                     }
+                    return new AiAbilityDecision(0, AiPlayDecision.CantPlayAi);
                 }
 
                 dmg = ComputerUtilCost.setMaxXValue(sa, ai, sa.isTrigger());
@@ -179,9 +178,8 @@ public class DamageDealAi extends DamageAiBase {
                      */
                      if (damageTargetAI(ai, sa, n, true)) {
                          return new AiAbilityDecision(100, AiPlayDecision.WillPlay);
-                     } else {
-                         return new AiAbilityDecision(0, AiPlayDecision.TargetingFailed);
                      }
+                     return new AiAbilityDecision(0, AiPlayDecision.TargetingFailed);
                 } else {
                     /*
                      * Only ping when stack is clear to avoid hassle of evaluating stacked effects
@@ -189,9 +187,8 @@ public class DamageDealAi extends DamageAiBase {
                      */
                     if (ai.getGame().getStack().isEmpty() && damageTargetAI(ai, sa, n, false)) {
                         return new AiAbilityDecision(100, AiPlayDecision.WillPlay);
-                    } else {
-                        return new AiAbilityDecision(0, AiPlayDecision.StackNotEmpty);
                     }
+                    return new AiAbilityDecision(0, AiPlayDecision.StackNotEmpty);
                 }
             } else {
                 return new AiAbilityDecision(0, AiPlayDecision.CantPlayAi);
@@ -205,9 +202,8 @@ public class DamageDealAi extends DamageAiBase {
                     if (tgt != null) {
                         if (ai.getGame().getPhaseHandler().getPlayerTurn() == tgt.getController()) {
                             return new AiAbilityDecision(100, AiPlayDecision.WillPlay);
-                        } else {
-                            return new AiAbilityDecision(0, AiPlayDecision.WaitForEndOfTurn);
                         }
+                        return new AiAbilityDecision(0, AiPlayDecision.WaitForEndOfTurn);
                     }
                 }
             }
@@ -520,7 +516,7 @@ public class DamageDealAi extends DamageAiBase {
 
         if ("PowerDmg".equals(logic)) {
             // check if it is better to target the player instead, the original target is already set in PumpAi.pumpTgtAI()
-            if (tgt.canTgtCreatureAndPlayer() && shouldTgtP(ai, sa, dmg, noPrevention)) {
+            if (tgt.canTgtCreature() && tgt.canTgtPlayer() && shouldTgtP(ai, sa, dmg, noPrevention)) {
                 sa.resetTargets();
                 sa.getTargets().add(enemy);
             }
@@ -632,7 +628,7 @@ public class DamageDealAi extends DamageAiBase {
                 }
             }
 
-            if (tgt.canTgtCreatureAndPlayer()) {
+            if (tgt.canTgtCreature() && tgt.canTgtPlayer()) {
                 Card c = null;
 
                 if (shouldTgtP(ai, sa, dmg, noPrevention)) {
@@ -675,29 +671,6 @@ public class DamageDealAi extends DamageAiBase {
 
                 // TODO: add check here if card is about to die from something
                 // on the stack or from taking combat damage
-
-                final Cost abCost = sa.getPayCosts();
-                boolean freePing = immediately || abCost == null || sa.getTargets().size() > 0;
-
-                if (!source.isSpell()) {
-                    if (phase.is(PhaseType.END_OF_TURN) && sa.isAbility() && abCost.isReusuableResource()) {
-                        if (phase.getNextTurn().equals(ai))
-                            freePing = true;
-                    }
-
-                    if (phase.is(PhaseType.MAIN2) && sa.isAbility()) {
-                        if (sa.isPwAbility() || source.hasSVar("EndOfTurnLeavePlay"))
-                            freePing = true;
-                    }
-                }
-
-                if (freePing && sa.canTarget(enemy) && !avoidTargetP(ai, sa)) {
-                    tcs.add(enemy);
-                    if (divided) {
-                        sa.addDividedAllocation(enemy, dmg);
-                        break;
-                    }
-                }
             } else if (tgt.canTgtCreature() || tgt.canTgtPlaneswalker()) {
                 final Card c = dealDamageChooseTgtC(ai, sa, dmg, noPrevention, enemy, mandatory);
                 if (c != null) {
@@ -734,13 +707,28 @@ public class DamageDealAi extends DamageAiBase {
                 return false;
             }
             if (sa.canTarget(enemy) && sa.canAddMoreTarget()) {
+                final Cost abCost = sa.getPayCosts();
+                boolean freePing = immediately || abCost == null || sa.getTargets().size() > 0;
+
+                if (!source.isSpell()) {
+                    if (phase.is(PhaseType.END_OF_TURN) && sa.isAbility() && abCost.isReusuableResource()) {
+                        if (phase.getNextTurn().equals(ai))
+                            freePing = true;
+                    }
+
+                    if (phase.is(PhaseType.MAIN2) && sa.isAbility()) {
+                        if (sa.isPwAbility() || source.hasSVar("EndOfTurnLeavePlay"))
+                            freePing = true;
+                    }
+                }
+
                 if ((phase.is(PhaseType.END_OF_TURN) && phase.getNextTurn().equals(ai))
                         || (isSorcerySpeed(sa, ai) && phase.is(PhaseType.MAIN2))
                         || ("BurnCreatures".equals(logic) && !enemy.getCreaturesInPlay().isEmpty())
                         || immediately) {
                     boolean pingAfterAttack = "PingAfterAttack".equals(logic) && phase.getPhase().isAfter(PhaseType.COMBAT_DECLARE_ATTACKERS) && phase.isPlayerTurn(ai);
                     boolean isPWAbility = sa.isPwAbility() && sa.getPayCosts().hasSpecificCostType(CostPutCounter.class);
-                    if (isPWAbility || (pingAfterAttack && !avoidTargetP(ai, sa)) || shouldTgtP(ai, sa, dmg, noPrevention)) {
+                    if ((freePing && !avoidTargetP(ai, sa)) || isPWAbility || (pingAfterAttack && !avoidTargetP(ai, sa)) || shouldTgtP(ai, sa, dmg, noPrevention)) {
                         tcs.add(enemy);
                         if (divided) {
                             sa.addDividedAllocation(enemy, dmg);
