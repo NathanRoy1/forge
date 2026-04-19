@@ -19,7 +19,7 @@ extensible.
 
 Notre contribution se concentre sur le module `forge-ai`, responsable de toutes les décisions prises par le joueur
 contrôlé par l'ordinateur. Les améliorations visent à corriger des comportements erronés de l'IA lors de l'évaluation
-d'aptitudes activées, notamment pour des cartes comme **Psychic Frog** et **Emry, Lurker of the Loch**.
+d'aptitudes activées, notamment pour des cartes comme **Psychic Frog**, **Emry, Lurker of the Loch** et **Deadeye Duelist**.
 
 ---
 
@@ -192,6 +192,53 @@ la permission de lancer des cartes depuis le cimetière : elle retournait toujou
 - La pull Request : [Pull Request Emry's Lurker of the Loch](https://github.com/Card-Forge/forge/pull/9783)
 
 
+---
+
+### Issue 3 — L'IA n'active pas l'aptitude de tap de Deadeye Duelist
+
+**Description**
+
+L'IA contrôlant un **Deadeye Duelist** sur le champ de bataille n'activait jamais son aptitude (`{1}, {T}` : Deadeye
+Duelist inflige 1 blessure à l'adversaire ciblé), même en fin de tour adverse avec suffisamment de mana et aucune
+raison de conserver la créature engagée.
+
+**Étapes pour reproduire**
+
+1. L'IA contrôle 2 Deadeye Duelist sans maladie d'invocation et 2 Friches.
+2. L'adversaire contrôle 2 Spellskites avec 2 marqueurs +1/+1.
+3. L'adversaire passe son tour sans attaquer.
+4. L'IA ne active pas l'aptitude de Deadeye Duelist en fin de tour adverse.
+
+**Comportement attendu**
+
+L'IA devrait activer l'aptitude de Deadeye Duelist en fin de tour adverse si :
+
+- Elle possède suffisamment de mana (`{1}` disponible).
+- La créature n'a pas attaqué ce tour (pas engagée).
+- Il n'y a aucune meilleure utilisation du mana à ce moment.
+
+**Démarche de résolution**
+
+En inspectant `DamageDealAi.java`, j'ai constaté que la méthode `damageChoosingTargets` dispose d'un bloc
+`freePing` pour les créatures pouvant cibler **créatures et joueurs** (ex. : Prodigal Sorcerer avec `ValidTgts$ Any`).
+Cependant, Deadeye Duelist utilise `ValidTgts$ Opponent` (joueurs seulement), ce qui fait que `canTgtCreatureAndPlayer()`
+retourne `false` et le bloc `freePing` est ignoré. L'IA tombait dans le cas général qui exige que `shouldTgtP()`
+soit vrai (adversaire à moins de 5 PV), condition rarement remplie.
+
+J'ai ajouté une condition `freePingPlayerOnly` dans le bloc de ciblage général qui autorise l'activation en fin
+de tour adverse pour toute aptitude activée ne ciblant que des joueurs (pas des créatures).
+
+**Fichiers modifiés**
+
+- `forge-ai/src/main/java/forge/ai/ability/DamageDealAi.java`
+
+*Liens vers l'issue*
+- L'issue directement sur le dépôt Forge : [Issue Deadeye Duelist](https://github.com/Card-Forge/forge/issues/7476)
+- L'issue de mon dépot : [Issue Deadeye Duelist](https://github.com/NathanRoy1/forge/tree/AI-doesn't-activate-ability-of-Deadeye-Duelist)
+- La pull Request : [Pull Request Deadeye Duelist](https://github.com/Card-Forge/forge/pull/10375)
+
+---
+
 ## Tester mes corrections
 
 ### Psychic Frog
@@ -208,6 +255,37 @@ Démarrez une nouvelle partie avec un deck contenant Emry et plusieurs artefacts
 Laissez Emry déclencher son entrée en jeu (mouliner 4 cartes).
 Assurez-vous que l'IA a assez de mana pour relancer un artefact.
 Résultat attendu : l'IA tape Emry pour relancer l'artefact au coût de mana le plus élevé disponible dans son cimetière.
+
+### Deadeye Duelist
+
+Démarrez une nouvelle partie avec un deck contenant Deadeye Duelist (assigné à l'IA) et des Friches.
+Assurez-vous que l'IA a au moins 1 mana disponible et que Deadeye Duelist n'est pas engagé.
+Passez votre tour sans attaquer.
+Résultat attendu : l'IA active l'aptitude de Deadeye Duelist en fin de votre tour pour infliger 1 blessure.
+
+## Tests unitaires
+
+Les tests automatisés couvrent les modifications apportées à l'IA.
+
+| Classe de test | Chemin | Framework |
+|---|---|---|
+| `PsychicFrogAiTest` | `forge-gui-desktop/src/test/java/forge/ai/ability/PsychicFrogAiTest.java` | TestNG |
+| `EmryAiTest` | `forge-ai/src/main/java/forge/ai/ability/EmryAiTest.java` | JUnit 5 |
+
+### Description des tests
+
+**`PsychicFrogAiTest`** — Vérifie la logique ajoutée dans `CountersPutAi.java` pour Psychic Frog :
+
+- `testPsychicFrogActivatesCounterWhenItKillsTheAttacker` — Cas positif : le Frog (1/2) bloque un 2/2. Le marqueur +1/+1 lui permet de tuer l'attaquant. L'IA doit activer l'aptitude (`ImpactCombat`).
+- `testPsychicFrogDoesNotActivateWhenCounterDoesNotHelp` — Cas négatif : le Frog (1/2) bloque un 3/3. Le marqueur +1/+1 ne lui permet ni de tuer l'attaquant ni de survivre. L'IA ne doit pas activer l'aptitude (`CantPlayAi`).
+
+**`EmryAiTest`** — Vérifie la logique ajoutée dans `EffectAi.java` pour Emry, Lurker of the Loch (tests en isolation avec des objets simulés, sans démarrer le moteur Forge) :
+
+- `testEmry_EmptyGraveyard_ShouldNotActivate` — Cimetière vide : aucun artefact jouable, l'IA ne doit pas activer Emry (`CantPlayAi`).
+- `testEmry_OpponentTurnCombat_FlashBlockerKillsAttacker_ShouldActivate` — Tour adverse en combat, un artefact-créature Flash dans le cimetière peut tuer l'attaquant : l'IA doit activer Emry (`WillPlay`).
+- `testEmry_OpponentTurnCombat_NoFlashBlocker_ShouldNotActivate` — Tour adverse en combat, mais aucun artefact avec Flash dans le cimetière : l'IA ne doit pas activer Emry (`CantPlayAi`).
+
+---
 
 ## Ressources
 
@@ -228,6 +306,3 @@ Résultat attendu : l'IA tape Emry pour relancer l'artefact au coût de mana le 
         </a>
     </div>
 </div>
-
-
-
